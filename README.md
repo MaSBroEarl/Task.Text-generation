@@ -1,38 +1,34 @@
 # Task.Text-generation
-
-# Dialog Summarization with LoRA Fine-tuning
+# Dialogue Summarization with LoRA Fine-tuning
 
 ## 📌 Описание проекта
 
-Дообучение модели **Qwen/Qwen2.5-1.5B-Instruct** на датасете **DialogSum** для задачи суммаризации диалогов с использованием **LoRA** (Low-Rank Adaptation).
+В работе происхоидт дообучение модели **Qwen/Qwen2.5-1.5B-Instruct** на датасете **DialogSum** для задачи суммаризации диалогов с использованием **LoRA** (Low-Rank Adaptation). В работе сравниваются три подхода:
+
+1. **Baseline** — суммаризация с помощью эвристического правила (первое + последнее предложение)
+2. **Zero-shot** — использование предобученной LLM без дообучения
+3. **LoRA Fine-tune** — дообучение модели на целевых данных
 
 ---
 
 ## 📊 Результаты
 
-### Сравнение метрик ROUGE/BLEU
+### Сравнение метрик ROUGE и BLEU
 
-| Метрика | Baseline | Zero-shot | Fine-tune |
-|:--------|---------:|----------:|----------:|
-| **ROUGE-1** | 0.1672 | 0.2261 | **0.2123** |
-| **ROUGE-2** | 0.0517 | 0.0485 | **0.0888** |
-| **ROUGE-L** | 0.1458 | 0.1678 | **0.1571** |
-| **BLEU** | – | 0.0267 | **0.0275** |
+| Метод | ROUGE-1 | ROUGE-2 | ROUGE-L | BLEU |
+|:------|--------:|--------:|--------:|-----:|
+| Baseline (первое + последнее) | 0.1672 | 0.0517 | 0.1458 | – |
+| Zero-shot (Qwen 1.5B) | 0.2261 | 0.0485 | 0.1678 | 0.0267 |
+| **LoRA Fine-tune (Qwen 1.5B)** | **0.2123** | **0.0888** | **0.1571** | **0.0275** |
 
 ### LLM-as-Judge (Groq, Llama 3.3 70B)
 
-| Критерий | Средний балл (1-5) |
-|:---------|:---:|
-| **Relevance** | 3.8 |
-| **Conciseness** | 4.4 |
-| **Fluency** | 5.0 |
-| **Общий** | **4.4** |
+Средние оценки по шкале 1-5:
+
+| Метод | Relevance | Conciseness | Fluency | Средний |
+|:------|:---------:|:-----------:|:-------:|:-------:|
+| Baseline | 2.2 | 3.0 | 3.8 | **3.0** |
+| Zero-shot | 3.4 | 4.0 | 4.6 | **4.0** |
+| **LoRA Fine-tune** | **3.8** | **4.4** | **5.0** | **4.4** |
 
 ---
-
-## 🖥️ Установка
-
-```bash
-pip install -q transformers peft accelerate bitsandbytes datasets
-pip install -q rouge-score nltk
-pip install -q groq
